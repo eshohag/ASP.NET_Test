@@ -1,0 +1,76 @@
+﻿@model ASP.NET_Test.Models.Activity
+
+@{
+    ViewBag.Title = "Index";
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div class="row">
+        <div class="col-md-12">
+            @if (ViewBag.Message != null)
+            {
+                <div class="alert alert-warning text-center">
+                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                    <strong>Already!</strong> @ViewBag.Message.
+                </div>
+            }
+
+            @if (ViewBag.Success != null)
+            {
+                <div class="alert alert-success text-center">
+                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                    <strong>Successfully!</strong> @ViewBag.Success.
+                </div>
+            }
+            <h3>7 Days Present or Absent Student</h3>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.StudentId, "Student ID", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.DropDownListFor(a => a.StudentId, new SelectList(ViewBag.Students, "Value", "Text"), "--Select Student ID--", new { @class = "form-control" })
+
+                    @Html.ValidationMessageFor(model => model.StudentId, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+        <br/>
+        <div class="col-md-12">
+            <div class="form-group">
+                @Html.LabelFor(model => model.DaysId, "Present / Absent Day", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.DropDownListFor(a => a.DaysId, new SelectList(ViewBag.Days, "Value", "Text"), "--Select Days--", new { @class = "form-control" })
+
+                    @Html.ValidationMessageFor(model => model.DaysId, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+        <br/>
+
+        <div class="col-md-12">
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <div class="checkbox col-md-6">
+                        @Html.CheckBoxFor(m => m.Present)
+                        @Html.LabelFor(m => m.Present, new { @style = "font-size:13px;" })
+                    </div>
+                    @Html.ValidationMessageFor(m => m.Present, "", new { @class = "text-danger col-md-6" })
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-12">
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Add" class="btn btn-danger" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+}
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
