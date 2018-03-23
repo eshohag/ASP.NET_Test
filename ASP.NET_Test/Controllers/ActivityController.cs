@@ -71,6 +71,7 @@ namespace ASP.NET_Test.Controllers
 
         private void GetDetailsHistory(Student aStudent, List<Activity> activities)
         {
+            int absent = 7 - activities.Count;
             int sl = 1;
             DataTable dt = new DataTable();
             dt.Columns.AddRange(new DataColumn[2] {
@@ -90,7 +91,7 @@ namespace ASP.NET_Test.Controllers
                     StringBuilder sb = new StringBuilder();
 
                     //Generate Header.
-                    sb.Append("<br/>");
+                    sb.Append("<h2>Last-7 Days Present or Absent History for Student</h2><br/><br/>");
                     sb.Append("<table width='100%' cellspacing='0' cellpadding='2' style='font-family: Calibri; font-size: 8pt;'>");
                     sb.Append("<tr><td colspan = '2'></td></tr>");
                     sb.Append("<tr><td style='font-size:14pt;'><b> ");
@@ -144,6 +145,10 @@ namespace ASP.NET_Test.Controllers
                     sb.Append("<tr><td colspan = '2'></td></tr>");
                     sb.Append("<tr><td>Total Present Day: ");
                     sb.Append(activities.Count);
+                    sb.Append("</td><td align = 'right'>");
+                    sb.Append(" </td></tr>");
+                    sb.Append("<tr><td>Total Abesent Day: ");
+                    sb.Append(absent);
                     sb.Append("</td><td align = 'right'>");
                     sb.Append(" </td></tr>");
                     sb.Append("</table>");

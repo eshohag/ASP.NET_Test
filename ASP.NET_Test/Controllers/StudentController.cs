@@ -1,5 +1,7 @@
 ﻿using ASP.NET_Test.Models;
 using CaptchaMvc.HtmlHelpers;
+using System;
+using System.Data.Entity.Migrations;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -31,9 +33,14 @@ namespace ASP.NET_Test.Controllers
             if (this.IsCaptchaValid(""))
             {
                 var studentIdIsExist = db.Students.Where(a => a.StudentId.Equals(model.StudentId));
+                var contactNo = db.Students.FirstOrDefault(a => a.ContactNo == model.ContactNo);
                 if (studentIdIsExist.Any())
                 {
                     ViewBag.Message = "Already, Exist your Student ID-" + model.StudentId;
+                }
+                else if (contactNo != null)
+                {
+                    ViewBag.Message = "Already, Exist your Contact No-" + model.ContactNo;
                 }
                 else
                 {
@@ -103,6 +110,40 @@ namespace ASP.NET_Test.Controllers
             db.Students.Remove(student);
             await db.SaveChangesAsync();
             return RedirectToAction("Index");
+        }
+        // GET: Student/Edit/5
+        public async Task<ActionResult> Edit(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            var student = await db.Students.FindAsync(id);
+            if (student == null)
+            {
+                return HttpNotFound();
+            }
+            return View(student);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Edit(Student student)
+        {
+            try
+            {
+                Student aStudent = db.Students.FirstOrDefault(a => a.Id == student.Id);
+                aStudent.FullName = student.FullName;
+                db.Students.AddOrUpdate(aStudent);
+                await db.SaveChangesAsync();
+                return RedirectToAction("Index");
+            }
+            catch (Exception e)
+            {
+                //Error
+                Console.WriteLine(e.Message);
+            }
+            return View(student);
         }
 
         protected override void Dispose(bool disposing)
